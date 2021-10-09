@@ -19,4 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('email', 'username', 'is_admin',)
         read_only_fields = ('modified',)
 
-    
+class LoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields=('email','token',)  
