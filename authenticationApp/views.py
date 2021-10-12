@@ -34,6 +34,7 @@ class VerifyEmail(views.APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
+            #decode the token from the email
             payload = jwt.decode(token, settings.SECRET_KEY, 'HS256',)
             print(payload)
             user = CustomUser.objects.get(id=payload['user_id'])
