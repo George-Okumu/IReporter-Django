@@ -9,6 +9,7 @@ djangorestframework = "*"
 python-decouple = "*"
 djangorestframework-simplejwt = "*"
 pillow = "*"
+gunicorn = "*"
 
 [dev-packages]
 
