@@ -8,7 +8,7 @@ class RedFlagList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = RedFlag.objects.all()
     serializer_class = RedFlagSerializer
-    
+    #perfom user redflag creation
     def perform_create(self, serializer):
         print(self.request.user)
         serializer.save(user=self.request.user.pk)
