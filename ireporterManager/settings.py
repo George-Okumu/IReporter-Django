@@ -29,7 +29,7 @@ from decouple import config
 ALLOWED_HOSTS = [
     '*',
 ]
-MODE=config("MODE", default="dev")
+MODE=config("MODE_", default="dev")
 DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 

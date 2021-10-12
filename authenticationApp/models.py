@@ -72,7 +72,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             'id': self.pk,
             'exp': int(dt.strftime('%s')),
             'email':self.email
-        }, settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
+        }, settings.SECRET_KEY, algorithm='HS256')
 
         return token
 
