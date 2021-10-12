@@ -82,7 +82,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+SIMPLE_JWT = {
+    # 'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 REST_FRAMEWORK = {
     
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -121,6 +124,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+SIMPLE_JWT = {
+     # Use JWT 
+    #  'AUTH_HEADER_TYPES': ('JWT',),
+     'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
