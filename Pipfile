@@ -10,6 +10,8 @@ python-decouple = "*"
 djangorestframework-simplejwt = "*"
 pillow = "*"
 gunicorn = "*"
+django-heroku = "*"
+dj-database-url = "*"
 
 [dev-packages]
 
