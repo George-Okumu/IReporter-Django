@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.response import Response
 from .models import CustomUser
-from .serializers import RegistrationSerializer
+from .serializers import RegistrationSerializer, LoginSerializer
 from django.urls import reverse
 from .EmailHandler import EmailHandlerClass
 import jwt
@@ -36,7 +36,6 @@ class VerifyEmail(views.APIView):
         try:
             #decode the token from the email
             payload = jwt.decode(token, settings.SECRET_KEY, 'HS256',)
-            print(payload)
             user = CustomUser.objects.get(id=payload['user_id'])
             if not user.is_email_verified:
                 user.is_email_verified = True
@@ -46,6 +45,25 @@ class VerifyEmail(views.APIView):
             return Response({'error': 'Your Token has expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error': 'Token Is Invalid'}, status=status.HTTP_400_BAD_REQUEST)
+class LoginView(views.APIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginSerializer
+    def post(self, request):
+        data = request.data
+        email = data.get('email')
+        password = data.get('password')
+        user = auth.authenticate(username=email, password=password)
+        if user:
+            serializer = LoginSerializer(user)
+            if not user.is_email_verified:
+                return Response({'Denied':'Account not active, Verify your email address to activate your account'})
+            else:
+                data ={
+                    'message':'Login Successfull',
+                    'token':serializer.data.get('token')
+                }
+                return Response(data, status=status.HTTP_200_OK)
+        return Response({'Error':'User with credentials do not exist'}, status=status.HTTP_401_UNAUTHORIZED)
 
                 
     
