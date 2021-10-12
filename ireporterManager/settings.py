@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'ireporterManager.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # development
-if config('MODE')=="dev":
+if config('MODE_')=="dev":
    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
