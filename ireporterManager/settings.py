@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'ireporterManager.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+       'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ireporter',
+        'USER': 'obonyo',
+        'PASSWORD': 'akoth1998',
+        'HOST': 'localhost',
+        'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
 

@@ -22,4 +22,4 @@ class UserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields=('email','token',)  
+        fields=('email','password','token',)  
