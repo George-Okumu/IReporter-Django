@@ -40,4 +40,3 @@ jobs:
     - name: Run Tests
       run: |
         pipenv run make test_report
-        
