@@ -1,7 +1,8 @@
 from rest_framework import serializers
-from .models import  CustomUser
+from .models import  CustomUser,Intervention
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=128,min_length=2,write_only=True)
@@ -26,3 +27,8 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields=('email','password','token',)  
+class InterventionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Intervention
+        fields=('subject','description','location',)  
+               
