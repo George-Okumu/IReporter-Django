@@ -11,6 +11,5 @@ class RedFlag(models.Model):
     redFlag_video = models.CharField(max_length=20, null=True, blank=True)
     redFlag_location = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
-
     def __str__(self):
         return self.title

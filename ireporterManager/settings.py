@@ -25,7 +25,7 @@ from decouple import config
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-
+CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = [
     '*',
 ]
@@ -43,11 +43,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'authenticationApp',
     'ireporterApp',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
