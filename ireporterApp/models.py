@@ -14,3 +14,10 @@ class RedFlag(models.Model):
 
     def __str__(self):
         return self.title
+class Intervention(models.Model):
+    subject = models.TextField(max_length=200)
+    description = models.TextField()
+    location = models.TextField(max_length=90)
+    upload_image = models.ImageField(null=True)
+    video =models.CharField(max_length=20, null=True, blank=True)
+    save = models.TextField()       

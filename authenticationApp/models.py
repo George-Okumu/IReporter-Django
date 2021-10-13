@@ -74,11 +74,3 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         }, settings.SECRET_KEY, algorithm='HS256')
         return token
 
-class Intervention(AbstractBaseUser, PermissionsMixin):
-    objects = CustomUserManager()
-    subject = models.TextField()
-    description = models.TextField()
-    location = models.TextField()
-    upload_image = models.ImageField(null=True)
-    video =models.FIleField(null=True)
-    save = models.TextField()
