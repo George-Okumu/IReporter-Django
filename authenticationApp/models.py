@@ -62,16 +62,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def get_full_name(self):
         return self.email
 
-    def __unicode__(self):
-        return self.email
+ 
     def _generate_jwt_token(self):
-        dt = datetime.now() + timedelta(days=1)
+        dt = datetime.now() + timedelta(days=30)
         token = jwt.encode({
             'username':self.username,
             'is_admin':self.is_admin,
             'id': self.pk,
-            'exp': int(dt.strftime('%s'))
+            'exp': int(dt.strftime('%s')),
+            'email':self.email
         }, settings.SECRET_KEY, algorithm='HS256')
-
         return token
 

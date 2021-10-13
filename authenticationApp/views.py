@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.response import Response
 from .models import CustomUser
-from .serializers import RegistrationSerializer,LoginSerializer
+from .serializers import RegistrationSerializer, LoginSerializer
 from django.urls import reverse
 from .EmailHandler import EmailHandlerClass
 import jwt
@@ -54,8 +54,8 @@ class VerifyEmail(views.APIView):
     def get(self, request):
         token = request.GET.get('token')
         try:
+            #decode the token from the email
             payload = jwt.decode(token, settings.SECRET_KEY, 'HS256',)
-            print(payload)
             user = CustomUser.objects.get(id=payload['user_id'])
             if not user.is_email_verified:
                 user.is_email_verified = True
@@ -76,12 +76,14 @@ class LoginView(views.APIView):
         if user:
             serializer = LoginSerializer(user)
             if not user.is_email_verified:
-                return Response({'Denied':'Account not active, Verify your email to activate the account'})
+                return Response({'Denied':'Account not active, Verify your email address to activate your account'})
             else:
                 data ={
                     'message':'Login Successfull',
                     'token':serializer.data.get('token')
                 }
-            return Response(data, status=status.HTTP_200_OK)
+                return Response(data, status=status.HTTP_200_OK)
         return Response({'Error':'User with credentials do not exist'}, status=status.HTTP_401_UNAUTHORIZED)
-        
+
+                
+    
