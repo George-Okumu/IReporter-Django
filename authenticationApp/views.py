@@ -30,6 +30,7 @@ class RegistrationAPIView(generics.GenericAPIView):
         data ={'email_body':email_body, 'email_to':user.email,'email_subject': 'Activate Ireporter Account'}
         EmailHandlerClass.sendEmail(data)
         return Response(user_data, status=status.HTTP_200_OK)
+
         
 class VerifyEmail(views.APIView):
     def get(self, request):
