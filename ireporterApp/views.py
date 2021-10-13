@@ -22,5 +22,4 @@ class RedFlagDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RedFlagSerializer
     def perform_update(self, serializer):
         user_type = self.request.user.is_admin
-        print(user_type)
         return super().perform_update(serializer)
