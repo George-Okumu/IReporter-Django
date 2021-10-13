@@ -12,7 +12,7 @@ class RedFlag(models.Model):
     description = models.TextField(max_length=100)
     status = models.CharField(max_length=20, default='received',)
     redFlag_image = models.ImageField(upload_to=redflag_image_upload)
-    redFlag_video = models.FileField(upload_to=redflag_video_upload, null=True, storage=VideoMediaCloudinaryStorage(), validators=[validate_video])
+    redFlag_video = models.FileField(upload_to=redflag_video_upload, null=True, blank=True, max_length=4000, storage=VideoMediaCloudinaryStorage(), validators=[validate_video])
     redFlag_location = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
     def __str__(self):
