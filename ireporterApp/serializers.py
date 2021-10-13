@@ -8,4 +8,4 @@ class RedFlagSerializer(serializers.ModelSerializer):
 class InterventionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Intervention
-        fields=('subject','description','location','save',) 
+        fields=('subject','description','location',) 

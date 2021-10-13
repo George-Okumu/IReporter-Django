@@ -1,6 +1,7 @@
 from django.http import request
 from .models import RedFlag
-from .serializers import RedFlagSerializer
+from .models import Intervention
+from .serializers import InterventionSerializer, RedFlagSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
@@ -24,3 +25,20 @@ class RedFlagDetail(generics.RetrieveUpdateDestroyAPIView):
         user_type = self.request.user.is_admin
         print(user_type)
         return super().perform_update(serializer)
+
+class InterventionDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset =Intervention.objects.all()
+    serializer_class = InterventionSerializer
+    def perform_update(self, serializer):
+        user_type = self.request.user.is_admin
+        print(user_type)
+        return super().perform_update(serializer)
+
+class InterventionList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+    queryset = Intervention.objects.all()
+    serializer_class = InterventionSerializer
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        

@@ -20,4 +20,3 @@ class Intervention(models.Model):
     location = models.TextField(max_length=90)
     upload_image = models.ImageField(null=True)
     video =models.CharField(max_length=20, null=True, blank=True)
-    save = models.TextField()       
