@@ -5,15 +5,15 @@ name = "pypi"
 
 [packages]
 django = "*"
-djangorestframework = "*"
-python-decouple = "*"
-djangorestframework-simplejwt = "*"
-pillow = "*"
-gunicorn = "*"
-django-heroku = "*"
 dj-database-url = "*"
-django-cors-headers = "*"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+django-heroku = "*"
+python-decouple = "*"
+pillow = "*"
 cloudinary = "*"
+django-cors-headers = "*"
+gunicorn = "*"
 
 [dev-packages]
 
