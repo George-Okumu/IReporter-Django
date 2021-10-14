@@ -14,6 +14,8 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+import dj_database_url
+import django_heroku
 
 from decouple import config
 # Quick-start development settings - unsuitable for production
@@ -24,8 +26,10 @@ from decouple import config
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = [
+    '*',
+]
+MODE=config("MODE_", default="dev")
 DEBUG = config('DEBUG', default=False, cast=bool)
 TEMPLATE_DEBUG = DEBUG
 
@@ -76,15 +80,32 @@ WSGI_APPLICATION = 'ireporterManager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+# development
+if config('MODE_')=="dev":
+   DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+       'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ireporter',
+        'USER': 'obonyo',
+        'PASSWORD': 'akoth1998',
+        'HOST': 'localhost',
+        'DISABLE_SERVER_SIDE_CURSORS': True,
     }
 }
-
+# production
+else:
+   DATABASES = {
+       'default': dj_database_url.config(
+           default=config('DATABASE_URL')
+       )
+   }
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+SIMPLE_JWT = {
+    # 'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
 REST_FRAMEWORK = {
-    
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authenticationApp.backends.JWTAuthentication',
     )
@@ -121,6 +142,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+SIMPLE_JWT = {
+     # Use JWT 
+    #  'AUTH_HEADER_TYPES': ('JWT',),
+     'AUTH_HEADER_TYPES': ('Bearer',),
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -141,4 +167,6 @@ EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
+
+django_heroku.settings(locals())
 
