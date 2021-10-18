@@ -12,6 +12,8 @@ class RedFlagList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     queryset = RedFlag.objects.all()
     serializer_class = RedFlagSerializer
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
   
     # def get_queryset(self):
         

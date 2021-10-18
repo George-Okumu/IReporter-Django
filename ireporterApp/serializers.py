@@ -6,11 +6,7 @@ class RedFlagSerializer(serializers.ModelSerializer):
     class Meta:
         model = RedFlag
         fields = ('redFlag_image', 'title', 'description', 'redFlag_video','user', 'status', 'redFlag_location',)
-        # def create(self, validated_data):
-        #     status_data = validated_data.pop('status')
-        #     status = RedFlag.objects.get(description=status_data['description'])  
-        #     job = RedFlag.objects.create(status=status,...) #categy object found by it's description
-        #     return job
+     
 class RedFlagAdminActionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = RedFlag
