@@ -14,10 +14,6 @@ class RedFlagList(generics.ListCreateAPIView):
     serializer_class = RedFlagSerializer
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-  
-    # def get_queryset(self):
-        
-    #     return super().get_queryset()
 
 
 class RedFlagDetail(generics.RetrieveUpdateDestroyAPIView):
