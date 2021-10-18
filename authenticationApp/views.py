@@ -6,8 +6,8 @@ from rest_framework.serializers import Serializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.response import Response
-from .models import CustomUser
-from .serializers import RegistrationSerializer, LoginSerializer
+from .models import CustomUser, Admin
+from .serializers import RegistrationSerializer, LoginSerializer, AdmiRegisterSerializer, AdminLoginSerializer
 from django.urls import reverse
 from .EmailHandler import EmailHandlerClass
 import jwt
@@ -31,7 +31,23 @@ class RegistrationAPIView(generics.GenericAPIView):
         EmailHandlerClass.sendEmail(data)
         return Response(user_data, status=status.HTTP_200_OK)
 
-        
+class AdminRegistrationAPIView(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = AdmiRegisterSerializer
+    def post(self, request):
+        user_request = request.data
+        serializer = self.serializer_class(data=user_request)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        user_data = serializer.data
+        user = Admin.objects.get(email = user_data['email'])
+        token = RefreshToken.for_user(user).access_token
+        reverse_link = reverse('verify-email')
+        absolute_url = 'http://'+get_current_site(request).domain+reverse_link+'?token='+str(token)
+        email_body = "Hello"+" " + user.username  +" "+ "click the link bellow to activate your account \n"+absolute_url
+        data ={'email_body':email_body, 'email_to':user.email,'email_subject': 'Activate Ireporter Account'}
+        EmailHandlerClass.sendEmail(data)
+        return Response(user_data, status=status.HTTP_200_OK)        
 class VerifyEmail(views.APIView):
     def get(self, request):
         token = request.GET.get('token')
@@ -66,6 +82,26 @@ class LoginView(views.APIView):
                 }
                 return Response(data, status=status.HTTP_200_OK)
         return Response({'Error':'User with credentials do not exist'}, status=status.HTTP_401_UNAUTHORIZED)
+class AdminLoginView(views.APIView):
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = LoginSerializer
 
+    def post(self, request):
+        data = request.data
+        email = data.get('email')
+        password = data.get('password')
+
+        user = auth.authenticate(username=email, password=password)
+        if user:
+            serializer = LoginSerializer(user)
+            if not user.is_email_verified:
+                return Response({'Denied':'Account not active, Verify your email address to activate your account'})
+            else:
+                data ={
+                    'message':'Login Successfull',
+                    'token':serializer.data.get('token')
+                }
+                return Response(data, status=status.HTTP_200_OK)
+        return Response({'Error':'User with credentials do not exist'}, status=status.HTTP_401_UNAUTHORIZED)
                 
     

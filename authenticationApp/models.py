@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
 import jwt
+from django.utils.translation import gettext_lazy as _
 from datetime import datetime, timedelta
 
 class CustomUserManager(BaseUserManager):
@@ -20,11 +21,8 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, username, email, password):
         if password is None:
             raise TypeError('Superusers must have a password.')
-      
-
         user = self.create_user(email, username, password)
         user.is_superuser = True
-        user.is_staff = True
         user.save()
         return user
   
@@ -34,10 +32,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     created = models.DateTimeField('created', auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=True)
     username = models.CharField(db_index=True, max_length=255, unique=True)
     is_email_verified = models.BooleanField(default=False)
+    class Types(models.TextChoices):
+        ADMIN="ADMIN", "Admin"
+        USER="USER", "User"
+    userType = models.CharField(_("userType"), max_length=30, choices=Types.choices, default=Types.USER)
     @property
     def token(self):
         return self._generate_jwt_token()
@@ -47,8 +48,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    def is_staff(self):
-        return self.is_admin
+    
 
     def has_perm(self, perm, obj=None):
         return True
@@ -67,10 +67,34 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         dt = datetime.now() + timedelta(days=30)
         token = jwt.encode({
             'username':self.username,
-            'is_admin':self.is_admin,
             'id': self.pk,
             'exp': int(dt.strftime('%s')),
-            'email':self.email
+            'email':self.email,
+            'userType':self.userType
         }, settings.SECRET_KEY, algorithm='HS256')
         return token
+# class AdminManager(models.Manager):
+    # def create_admin(self, username, email, password=None):
+    #     if email is None:
+    #         raise TypeError("Valid email address is required")
+    #     admin = self.model(username=username, email=self.normalize_email(email))
+    #     admin.set_password(password)
+    #     admin.save()
+    #     return admin
+    # def get_queryset(self, *args, **kwargs):
+    #     return super().get_queryset(*args, **kwargs).filter(userType = CustomUser.Types.ADMIN)
 
+class Admin(CustomUser):
+
+    class meta:
+
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.userType = CustomUser.Types.ADMIN
+            self.set_password(self.password)
+            self.email = self.email
+        super(Admin, self).save(*args, **kwargs)
+        
+        

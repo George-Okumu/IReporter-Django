@@ -3,7 +3,7 @@ from os import path
 from django.conf import settings
 from rest_framework import exceptions, authentication
 import jwt
-from .models import CustomUser
+from .models import  CustomUser
 class JWTAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
         auth_header = authentication.get_authorization_header(request)
