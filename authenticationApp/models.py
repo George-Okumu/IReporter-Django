@@ -85,9 +85,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     #     return super().get_queryset(*args, **kwargs).filter(userType = CustomUser.Types.ADMIN)
 
 class Admin(CustomUser):
-
     class meta:
-
         proxy = True
 
     def save(self, *args, **kwargs):
