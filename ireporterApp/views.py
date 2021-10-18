@@ -20,8 +20,7 @@ class RedFlagDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
     queryset = RedFlag.objects.all()
     serializer_class = RedFlagSerializer
-    def get_queryset(self):
-        return super().get_queryset(user = self.request.user)
+
     def perform_update(self, serializer):
         return super().perform_update(serializer)
 

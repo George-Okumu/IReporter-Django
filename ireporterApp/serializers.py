@@ -5,7 +5,7 @@ class RedFlagSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = RedFlag
-        fields = ('redFlag_image', 'title', 'description', 'redFlag_video','user', 'status', 'redFlag_location',)
+        fields = ('id','redFlag_image', 'title', 'description', 'redFlag_video','user', 'status', 'redFlag_location',)
      
 class RedFlagAdminActionsSerializer(serializers.ModelSerializer):
     class Meta:
