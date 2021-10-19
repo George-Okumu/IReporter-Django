@@ -33,6 +33,7 @@ class RedFlag(models.Model):
     redFlag_location = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
     def __str__(self):
+<<<<<<< HEAD
         return self.user.email
   
    
@@ -48,3 +49,12 @@ class RedFlag(models.Model):
         
 
   
+=======
+        return self.title
+class Intervention(models.Model):
+    subject = models.TextField(max_length=200)
+    description = models.TextField()
+    location = models.TextField(max_length=90)
+    upload_image = models.ImageField(null=True)
+    video =models.CharField(max_length=20, null=True, blank=True)
+>>>>>>> 6946a991c61f7446ebc4c3afb9194cacbfb328c1

@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.python.org/simple"
+url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
@@ -15,10 +15,15 @@ cloudinary = "*"
 django-cors-headers = "*"
 gunicorn = "*"
 
+
 [dev-packages]
 
 [requires]
+<<<<<<< HEAD
 python_version = "3.8"
 
 [packages.django-cloudinary-storage]
 extras = [ "video",]
+=======
+python_version = "3.6"
+>>>>>>> 6946a991c61f7446ebc4c3afb9194cacbfb328c1

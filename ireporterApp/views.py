@@ -4,6 +4,8 @@ from requests.adapters import Response
 from authenticationApp.EmailHandler import EmailHandlerClass
 from .models import RedFlag
 from .serializers import RedFlagSerializer, RedFlagAdminActionsSerializer
+from .models import Intervention
+from .serializers import InterventionSerializer, RedFlagSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly, IsAdmin
@@ -32,13 +34,19 @@ class RedFlagAdminActions(generics.RetrieveUpdateAPIView):
     serializer_class = RedFlagAdminActionsSerializer
 
     def perform_update(self, serializer):
-        status= serializer.validated_data.get('status')
-        print(status)
-        user =self.get_object()
-        email_body = "Hello"+" " + user  +" "+ "Your redflag status was updated by Admin to \n"+status
-        data ={'email_body':email_body, 'email_to':user,'email_subject': 'REDFLAG STATUS UPDATE'}
-        EmailHandlerClass.sendEmail(data)
+        user_type = self.request.user.is_admin
+        print(user_type)
         return super().perform_update(serializer)
-  
-   
 
+class InterventionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset =Intervention.objects.all()
+    serializer_class = InterventionSerializer
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class InterventionList(generics.ListCreateAPIView):
+    queryset = Intervention.objects.all()
+    serializer_class = InterventionSerializer
+    def perform_create(self, serializer):
+        serializer.save()
+        

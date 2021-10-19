@@ -13,6 +13,25 @@ from .EmailHandler import EmailHandlerClass
 import jwt
 from django.contrib import auth
 from django.conf import settings
+
+# class RegistrationAPIView(generics.GenericAPIView):
+#     permission_classes = (permissions.AllowAny,)
+#     serializer_class = RegistrationSerializer
+#     def post(self, request):
+#         user_request = request.data
+#         serializer = self.serializer_class(data=user_request)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.create()
+#         user_data = serializer.data
+#         user = CustomUser.objects.get(email = user_data['email'])
+#         token = RefreshToken.for_user(user).access_token
+#         reverse_link = reverse('verify-email')
+#         absolute_url = 'http://'+get_current_site(request).domain+reverse_link+'?token='+str(token)
+#         email_body = "Hello"+" " + user.username  +" "+ "click the link bellow to activate your account \n"+absolute_url
+#         data ={'email_body':email_body, 'email_to':user.email,'email_subject': 'Activate Ireporter Account'}
+#         EmailHandlerClass.sendEmail(data)
+#         return Response(user_data, status=status.HTTP_200_OK)
+
 class RegistrationAPIView(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = RegistrationSerializer
