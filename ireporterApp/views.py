@@ -48,5 +48,5 @@ class InterventionList(generics.ListCreateAPIView):
     queryset = Intervention.objects.all()
     serializer_class = InterventionSerializer
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(user=self.request.user)
         

@@ -6,6 +6,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save 
 def redflag_image_upload(instance, filename):
     return 'redflag/image/{}/{}'.format(instance.id, filename)
+def intervention_image_upload(instance, filename):
+    return 'intervention/image/{}/{}'.format(instance.id, filename)
 def redflag_video_upload(instance, filename):
     return 'redflag/video/{}/{}'.format(instance.id, filename)
 
@@ -33,28 +35,23 @@ class RedFlag(models.Model):
     redFlag_location = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-<<<<<<< HEAD
         return self.user.email
-  
-   
-#     @classmethod
-#     def post_create(cls, sender, instance, created, *args, **kwargs):
-#         if not created:
-#             instance.status.save()
-
-# post_save.connect(RedFlag.post_create, sender=RedFlag)
-    
-
-    
-        
-
-  
-=======
-        return self.title
 class Intervention(models.Model):
+    RECEIVED = 'received'
+    INVESTIGATING = 'investigating'
+    REJECTED = 'rejected'
+    RESOLVED = 'resolved'
+    IREPORTER_STATUS_CHOICES = [
+        (RECEIVED, 'received'),
+        (INVESTIGATING, 'investigating'),
+        (REJECTED, 'rejected'),
+        (RESOLVED, 'resolved'),
+        
+    ]
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='intervention_user', on_delete=models.CASCADE)
     subject = models.TextField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(max_length=100)
+    status = models.CharField(max_length=20, choices=IREPORTER_STATUS_CHOICES, default=RECEIVED)
     location = models.TextField(max_length=90)
-    upload_image = models.ImageField(null=True)
+    intervention_image = models.ImageField(upload_to=intervention_image_upload)
     video =models.CharField(max_length=20, null=True, blank=True)
->>>>>>> 6946a991c61f7446ebc4c3afb9194cacbfb328c1
