@@ -1,12 +1,13 @@
 from django.http import request
 from requests.adapters import Response
 
-from authenticationApp import serializers
+from authenticationApp.EmailHandler import EmailHandlerClass
 from .models import RedFlag
 from .serializers import RedFlagSerializer, RedFlagAdminActionsSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly, IsAdmin
+
 
 class RedFlagList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
@@ -30,12 +31,13 @@ class RedFlagAdminActions(generics.RetrieveUpdateAPIView):
     lookup_field='pk'
     serializer_class = RedFlagAdminActionsSerializer
 
-    def retrieve(self, request, *args, **kwargs):
-        data = self.get_object()
-        return super().retrieve(request, *args, **kwargs)
     def perform_update(self, serializer):
+        status= serializer.validated_data.get('status')
+        print(status)
         user =self.get_object()
-        print(user)
+        email_body = "Hello"+" " + user  +" "+ "Your redflag status was updated by Admin to \n"+status
+        data ={'email_body':email_body, 'email_to':user,'email_subject': 'REDFLAG STATUS UPDATE'}
+        EmailHandlerClass.sendEmail(data)
         return super().perform_update(serializer)
   
    

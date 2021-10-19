@@ -33,7 +33,7 @@ class RedFlag(models.Model):
     redFlag_location = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return self.user
+        return self.user.email
   
    
 #     @classmethod

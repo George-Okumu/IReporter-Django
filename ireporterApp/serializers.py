@@ -13,7 +13,5 @@ class RedFlagAdminActionsSerializer(serializers.ModelSerializer):
         fields = ('id','redFlag_image', 'title', 'description', 'redFlag_video','user', 'status', 'redFlag_location',)
         read_only_fields = ('id','redFlag_image', 'title', 'description', 'redFlag_video','user', 'redFlag_location',)
 
-        def update(self, instance, validated_data):
-            status = validated_data.get('status', self.status)
-            print(status)
+    
             
