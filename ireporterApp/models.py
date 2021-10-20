@@ -3,17 +3,12 @@ from django.conf import settings
 from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 from cloudinary_storage.validators import validate_video
 from django.dispatch import receiver 
-from django.db.models.signals import post_save 
 def redflag_image_upload(instance, filename):
     return 'redflag/image/{}/{}'.format(instance.id, filename)
 def intervention_image_upload(instance, filename):
     return 'intervention/image/{}/{}'.format(instance.id, filename)
 def redflag_video_upload(instance, filename):
     return 'redflag/video/{}/{}'.format(instance.id, filename)
-
-
- 
-
 class RedFlag(models.Model):
     RECEIVED = 'received'
     INVESTIGATING = 'investigating'
@@ -54,4 +49,3 @@ class Intervention(models.Model):
     status = models.CharField(max_length=20, choices=IREPORTER_STATUS_CHOICES, default=RECEIVED)
     location = models.TextField(max_length=90)
     intervention_image = models.ImageField(upload_to=intervention_image_upload)
-    video =models.CharField(max_length=20, null=True, blank=True)

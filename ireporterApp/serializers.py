@@ -14,6 +14,7 @@ class RedFlagAdminActionsSerializer(serializers.ModelSerializer):
         read_only_fields = ('id','redFlag_image', 'title', 'description', 'redFlag_video','user', 'redFlag_location',)  
         fields = ('redFlag_image', 'title', 'description', 'redFlag_video','user', 'status', 'redFlag_location',)
 class InterventionSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Intervention
         fields=('subject','description','location','status', 'user','intervention_image',) 

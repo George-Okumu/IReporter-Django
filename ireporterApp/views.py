@@ -41,10 +41,14 @@ class RedFlagAdminActions(generics.RetrieveUpdateAPIView):
 class InterventionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset =Intervention.objects.all()
     serializer_class = InterventionSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+
     def perform_update(self, serializer):
         return super().perform_update(serializer)
 
 class InterventionList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+
     queryset = Intervention.objects.all()
     serializer_class = InterventionSerializer
     def perform_create(self, serializer):
