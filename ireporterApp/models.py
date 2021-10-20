@@ -25,7 +25,7 @@ class RedFlag(models.Model):
     title = models.CharField(max_length=43)
     description = models.TextField(max_length=100)
     status = models.CharField(max_length=20, choices=IREPORTER_STATUS_CHOICES, default=RECEIVED)
-    redFlag_image = models.ImageField(upload_to=redflag_image_upload)
+    redFlag_image = models.ImageField(upload_to=redflag_image_upload, null=True, blank=True)
     redFlag_video = models.FileField(upload_to=redflag_video_upload, null=True, blank=True, max_length=4000, storage=VideoMediaCloudinaryStorage(), validators=[validate_video])
     redFlag_location = models.CharField(max_length=20, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=True)
