@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from typing import cast
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,7 +46,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'rest_framework',
     'authenticationApp',
-    'ireporterApp',   
+    'ireporterApp'   
 ]
 
 MIDDLEWARE = [
@@ -89,7 +90,9 @@ WSGI_APPLICATION = 'ireporterManager.wsgi.application'
 MODE_=config("MODE", default="dev")
 DEBUG = config('DEBUG', default=False, cast=bool)
 if config('MODE')=="dev":
-   DATABASES = {
+    DEBUG =config('DEBUG', cast=bool)
+
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
@@ -97,13 +100,13 @@ if config('MODE')=="dev":
 }
 # production
 else:
-   DATABASES = {
+    DATABASES = {
        'default': dj_database_url.config(
            default=config('DATABASE_URL')
        )
    }
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 SIMPLE_JWT = {
     # 'AUTH_HEADER_TYPES': ('JWT',),
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -164,6 +167,8 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SECRET_KEY = config('SECRET_KEY')
+
+MAPBOX_ACCESS_TOKEN =config('MAPBOX_ACCESS_TOKEN')
 
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')

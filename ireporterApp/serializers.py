@@ -17,4 +17,4 @@ class InterventionSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     class Meta:
         model = Intervention
-        fields=('subject','description','location','status', 'user','intervention_image',) 
+        fields=('id','subject','description','location','status', 'user','intervention_image',) 

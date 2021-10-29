@@ -14,7 +14,7 @@ pillow = "*"
 cloudinary = "*"
 django-cors-headers = "*"
 gunicorn = "*"
-
+geocoder = "*"
 
 [dev-packages]
 
