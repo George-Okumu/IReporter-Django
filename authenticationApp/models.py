@@ -38,6 +38,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Types(models.TextChoices):
         ADMIN="ADMIN", "Admin"
         USER="USER", "User"
+        
     userType = models.CharField(_("userType"), max_length=30, choices=Types.choices, default=Types.USER)
     @property
     def token(self):
