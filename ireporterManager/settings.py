@@ -10,17 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+from logging import DEBUG
 from pathlib import Path
 import os
 from typing import cast
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 import dj_database_url
 import django_heroku
 
 from decouple import config
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'cloudinary_storage',
     'django.contrib.staticfiles',
+    'drf_yasg2',
     'cloudinary',
     'rest_framework',
     'authenticationApp',
@@ -86,27 +90,26 @@ WSGI_APPLICATION = 'ireporterManager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# development
-MODE_=config("MODE", default="dev")
-DEBUG = config('DEBUG', default=False, cast=bool)
-if config('MODE')=="dev":
-    DEBUG =config('DEBUG', cast=bool)
+MODE =config('MODE', default="dev")
+DEBUG = config('DEBUG', default=False, cast=bool,)
 
-    DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
+if config('MODE') == "dev":
+    DEBUG = config('DEBUG')
+    DATABASES={
+        'default':{
+            'ENGINE':'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR , 'db.sqlite3'),
+        }   
     }
-}
-# production
+   
 else:
-    DATABASES = {
-       'default': dj_database_url.config(
-           default=config('DATABASE_URL')
-       )
-   }
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
+    DATABASES={
+        'default':dj_database_url.config(
+            default=config('DATABASE_URL')
+        )
+    }
+    db_from_env = dj_database_url.config(conn_max_age=500)
+    DATABASES['default'].update(db_from_env)
 SIMPLE_JWT = {
     # 'AUTH_HEADER_TYPES': ('JWT',),
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -159,7 +162,7 @@ SIMPLE_JWT = {
 
 STATIC_URL = '/static/'
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

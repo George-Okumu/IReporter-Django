@@ -32,7 +32,7 @@ class RedFlag(models.Model):
     redFlag_location =models.ForeignKey('Address', on_delete=models.CASCADE, null=True)
     status = models.CharField(max_length=20, choices=IREPORTER_STATUS_CHOICES, default=RECEIVED)
     redFlag_image = models.ImageField(upload_to=redflag_image_upload, null=True, blank=True)
-    redFlag_video = models.FileField(upload_to=redflag_video_upload, null=True, blank=True, max_length=4000, storage=VideoMediaCloudinaryStorage(), validators=[validate_video])    
+    redFlag_video = models.FileField(upload_to=redflag_video_upload, null=True, blank=True, max_length=4000,  validators=[validate_video])    
     created_at = models.DateTimeField(auto_now=True)
 
     

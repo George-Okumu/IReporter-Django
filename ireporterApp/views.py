@@ -5,7 +5,8 @@ from .models import RedFlag
 from .serializers import RedFlagSerializer, RedFlagAdminActionsSerializer
 from .models import Intervention
 from .serializers import InterventionSerializer, RedFlagSerializer
-from rest_framework import generics
+from rest_framework import generics, views
+
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly, IsAdmin
 

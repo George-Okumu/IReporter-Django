@@ -2,17 +2,20 @@
 from django.contrib.auth.signals import user_logged_in
 from django.shortcuts import render
 from rest_framework import generics, permissions, status, views, exceptions
+from rest_framework import serializers
 from rest_framework.serializers import Serializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework.response import Response
 from .models import CustomUser, Admin
-from .serializers import RegistrationSerializer, LoginSerializer, AdmiRegisterSerializer, AdminLoginSerializer
+from .serializers import RegistrationSerializer, LoginSerializer, AdmiRegisterSerializer, AdminLoginSerializer, EmailVerificationSerializer
 from django.urls import reverse
 from .EmailHandler import EmailHandlerClass
 import jwt
 from django.contrib import auth
 from django.conf import settings
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
 
 # class RegistrationAPIView(generics.GenericAPIView):
 #     permission_classes = (permissions.AllowAny,)
@@ -68,10 +71,12 @@ class AdminRegistrationAPIView(generics.GenericAPIView):
         EmailHandlerClass.sendEmail(data)
         return Response(user_data, status=status.HTTP_200_OK)        
 class VerifyEmail(views.APIView):
+    # serializer_class = EmailVerificationSerializer
+    # manual_params =openapi.Parameter(name='token', in_='body', type='string')
+    # @swagger_auto_schema(manual_parameters=[manual_params], query_serializer= serializer_class,)
     def get(self, request):
         token = request.GET.get('token')
         try:
-            #decode the token from the email
             payload = jwt.decode(token, settings.SECRET_KEY, 'HS256',)
             user = CustomUser.objects.get(id=payload['user_id'])
             if not user.is_email_verified:
@@ -82,7 +87,7 @@ class VerifyEmail(views.APIView):
             return Response({'error': 'Your Token has expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
             return Response({'error': 'Token Is Invalid'}, status=status.HTTP_400_BAD_REQUEST)
-class LoginView(views.APIView):
+class LoginView(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = LoginSerializer
     def post(self, request):
@@ -101,9 +106,9 @@ class LoginView(views.APIView):
                 }
                 return Response(data, status=status.HTTP_200_OK)
         return Response({'Error':'User with credentials do not exist'}, status=status.HTTP_401_UNAUTHORIZED)
-class AdminLoginView(views.APIView):
+class AdminLoginView(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
-    serializer_class = LoginSerializer
+    serializer_class = AdminLoginSerializer
 
     def post(self, request):
         data = request.data
@@ -112,7 +117,7 @@ class AdminLoginView(views.APIView):
 
         user = auth.authenticate(username=email, password=password)
         if user:
-            serializer = LoginSerializer(user)
+            serializer = AdminLoginSerializer(user)
             if not user.is_email_verified:
                 return Response({'Denied':'Account not active, Verify your email address to activate your account'})
             else:

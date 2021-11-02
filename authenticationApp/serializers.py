@@ -9,6 +9,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('email', 'username', 'password', 'token','userType',)
+        read_only_fields = ('userType',)  
 
     def create(self, validated_data):
         return CustomUser.objects.create_user(**validated_data)
@@ -22,6 +23,8 @@ class AdmiRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
         fields = ('email', 'username', 'password', 'token','userType',)
+        read_only_fields = ('userType',)  
+
         def create(self, validated_data):
             return Admin.objects.create_admin(**validated_data)
      
@@ -34,5 +37,11 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields=('email','password','token',)  
+
+class EmailVerificationSerializer(serializers.ModelSerializer):
+    token = serializers.CharField()
+    class Meta:
+        model = CustomUser
+        fields=('token',) 
  
                
